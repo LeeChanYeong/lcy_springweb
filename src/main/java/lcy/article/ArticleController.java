@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import lcy.book.chap11.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,12 +13,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 public class ArticleController {
 
 	@Autowired
 	ArticleDao articleDao;
+
+	Logger logger = LogManager.getLogger();
 
 	/**
 	 * 글 목록
@@ -39,28 +44,31 @@ public class ArticleController {
 	/**
 	 * 글 보기
 	 */
+	@GetMapping("/article/view")
+	public void articleView(@RequestParam("articleId") String articleId,
+			Model model) {
+		Article article = articleDao.getArticle(articleId);
+		model.addAttribute("article", article);
+	}
+
+	/**
+	 * 글 등록 화면
+	 */
 	@GetMapping("/article/addForm")
 	public String articleAddForm(HttpSession session) {
-		Object memberObj = session.getAttribute("MEMBER");
-		if (memberObj == null)
-			return "redirect:/app/loginForm";
 		return "article/addForm";
 	}
 
 	/**
 	 * 글 등록
 	 */
-	
 	@PostMapping("/article/add")
-	public String articleAdd(Article article, HttpSession session) {
-		Object memberObj = session.getAttribute("MEMBER");
-		if (memberObj == null)
-			return "redirect:/loginForm";
-
-		Member member = (Member) memberObj;
+	public String articleAdd(Article article,
+			@SessionAttribute("MEMBER") Member member) {
 		article.setUserId(member.getMemberId());
 		article.setName(member.getName());
 		articleDao.addArticle(article);
 		return "redirect:/app/article/list";
 	}
 }
+

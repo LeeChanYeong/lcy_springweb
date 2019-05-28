@@ -1,5 +1,4 @@
 package lcy.book.chap11;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +7,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-/**
- * SpringJdbc를 사용해서 구현
- * 
- * @author Jacob
- */
 @Repository
 public class MemberDao {
 

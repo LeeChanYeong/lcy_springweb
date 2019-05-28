@@ -1,5 +1,4 @@
 <!doctype html>
-<!-- p.358 [리스트 13.8] 로그인 성공 화면 수정 -->
 <html>
 <head>
 <base href="${pageContext.request.contextPath }/" />
